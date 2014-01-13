@@ -13,7 +13,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 requires = ['pyramid >= 1.3', 'hawkauthlib >= 0.1', 'tokenlib', 'webtest']
 
 setup(name='pyramid_hawkauth',
-      version='0.1.0.dev1',
+      version='0.1.0',
       description='pyramid_hawkauth',
       long_description=README + '\n\n' + CHANGES,
       license='MPLv2.0',

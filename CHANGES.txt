@@ -1,4 +1,4 @@
-PENDING
-=======
+v0.1.0 - 2014-13-01
+===================
 
 * Initial release, based on pyramid_macauth codebase.
