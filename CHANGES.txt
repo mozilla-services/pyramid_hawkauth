@@ -1,0 +1,4 @@
+PENDING
+=======
+
+* Initial release, based on pyramid_macauth codebase.
