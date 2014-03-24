@@ -10,7 +10,12 @@ with open(os.path.join(here, 'README.rst')) as f:
 with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
-requires = ['pyramid >= 1.3', 'hawkauthlib >= 0.1', 'tokenlib', 'webtest']
+requires = [
+    'pyramid >= 1.3',
+    'hawkauthlib >= 0.1',
+    'tokenlib >= 0.3',
+    'webtest'
+]
 
 setup(name='pyramid_hawkauth',
       version='0.1.1.dev1',

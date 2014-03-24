@@ -219,8 +219,9 @@ class HawkAuthenticationPolicy(object):
 
         If the Hawk token id is invalid then ValueError will be raised.
         """
-        secret = tokenlib.get_token_secret(tokenid, secret=self.master_secret)
-        data = tokenlib.parse_token(tokenid, secret=self.master_secret)
+        master_secret = self.master_secret
+        secret = tokenlib.get_derived_secret(tokenid, secret=master_secret)
+        data = tokenlib.parse_token(tokenid, secret=master_secret)
         userid = None
         for key in ("username", "userid", "uid", "email"):
             userid = data.get(key)

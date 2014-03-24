@@ -1,7 +1,7 @@
 PENDING
 =======
 
-* ???
+* Update use of tokenlib API for v0.3 and later.
 
 
 v0.1.0 - 2014-13-01
