@@ -9,12 +9,13 @@ A Pyramid authentication plugin for Hawk Access Authentication:
 
 """
 
-__ver_major__ = 0
-__ver_minor__ = 1
-__ver_patch__ = 1
-__ver_sub__ = ".dev1"
-__ver_tuple__ = (__ver_major__, __ver_minor__, __ver_patch__, __ver_sub__)
-__version__ = "%d.%d.%d%s" % __ver_tuple__
+__version__      = "2.0.0rc1"
+__description__  = "A Pyramid authentication plugin for HAWK"
+__url__          = "https://github.com/mozilla-services/pyramid_hawkauth"
+__license__      = "MPLv2.0"
+__author__       = 'Mozilla Services'
+__author_email__ = 'services-dev@mozilla.org'
+__keywords__     = 'authentication token hawk request signing'
 
 
 import functools

@@ -1,0 +1,16 @@
+# requires
+pyramid >= 1.6
+git+https://github.com/return42/hawkauthlib@six#egg=hawkauthlib   # hawkauthlib >= 2.0
+git+https://github.com/return42/tokenlib@six#egg=tokenlib         # tokenlib >= 2.0
+
+# tests_requires
+webtest
+
+# develop
+coverage
+nose
+pip
+pylint
+tox
+twine
+wheel
