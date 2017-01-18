@@ -1,106 +1,48 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+# pylint: disable=C0103
+
+# FIXME:
+#
+# pylint: disable=W1505
+
 
 import unittest
-import json
 import time
 
 from webtest import TestApp
 
 from zope.interface.verify import verifyClass
 
-from pyramid.request import Request
-from pyramid.response import Response
-from pyramid.config import Configurator
-from pyramid.interfaces import IAuthenticationPolicy
-from pyramid.httpexceptions import HTTPForbidden, HTTPUnauthorized
-from pyramid.security import (unauthenticated_userid,
-                              authenticated_userid,
-                              effective_principals,
-                              Everyone,
-                              Authenticated)
 
 import hawkauthlib
 
 from pyramid_hawkauth import HawkAuthenticationPolicy
 
 
-def make_request(config, path="/", environ={}):
-    """Helper function for making pyramid Request objects."""
-    my_environ = {}
-    my_environ["wsgi.version"] = (1, 0)
-    my_environ["wsgi.multithread"] = True
-    my_environ["wsgi.multiprocess"] = True
-    my_environ["wsgi.run_once"] = False
-    my_environ["wsgi.url_scheme"] = "http"
-    my_environ["REQUEST_METHOD"] = "GET"
-    my_environ["SCRIPT_NAME"] = ""
-    my_environ["PATH_INFO"] = path
-    my_environ["SERVER_NAME"] = "localhost"
-    my_environ["SERVER_PORT"] = "5000"
-    my_environ["QUERY_STRING"] = "5000"
-    my_environ.update(environ)
-    request = Request(my_environ)
-    request.registry = config.registry
-    return request
+from pyramid.config import Configurator
+from pyramid.interfaces import IAuthenticationPolicy
+from pyramid.httpexceptions import HTTPUnauthorized
+
+from pyramid.security import (
+    authenticated_userid
+    , Everyone
+    , Authenticated
+    , )
 
 
-# Something non-callable, to test loading non-callables by name.
-stub_non_callable = None
+from . helper import *   # pylint: disable=W0401, W0614
 
 
-def stub_find_groups(userid, request):
-    """Groupfinder with the following rules:
-
-        * any user with "bad" in their name is invalid
-        * the "test" user belongs to group "group"
-        * all other users have no groups
-
-    """
-    if "bad" in userid:
-        return None
-    if userid == "test":
-        return ["group"]
-    return []
-
-
-def stub_view_public(request):
-    """Stub view that returns userid if logged in, None otherwise."""
-    userid = unauthenticated_userid(request)
-    return Response(str(userid))
-
-
-def stub_view_auth(request):
-    """Stub view that returns userid if logged in, fails if not."""
-    userid = authenticated_userid(request)
-    if userid is None:
-        raise HTTPForbidden
-    return Response(userid)
-
-
-def stub_view_groups(request):
-    """Stub view that returns groups if logged in, fails if not."""
-    groups = effective_principals(request)
-    return Response(json.dumps([str(g) for g in groups]))
-
-
-def stub_decode_id(request, id, suffix="-SECRET"):
-    """Stub id-decoding function that appends suffix to give the secret."""
-    return id, id + suffix
-
-
-def stub_encode_id(request, id, suffix="-SECRET"):
-    """Stub id-encoding function that appends suffix to give the secret."""
-    return id, id + suffix
-
+TEST_PREFIX="pyramid_hawkauth.tests.helper"
 
 class TestHawkAuthenticationPolicy(unittest.TestCase):
     """Testcases for the HawkAuthenticationPolicy class."""
 
     def setUp(self):
         self.config = Configurator(settings={
-            "hawkauth.find_groups": "pyramid_hawkauth.tests:stub_find_groups",
+            "hawkauth.find_groups": TEST_PREFIX + ":stub_find_groups",
         })
         self.config.include("pyramid_hawkauth")
         self.config.add_route("public", "/public")
@@ -122,19 +64,19 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
         return req
 
     def _get_credentials(self, req, **data):
-        id, key = self.policy.encode_hawk_id(req, **data)
-        return {"id": id, "key": key}
+        _id, key = self.policy.encode_hawk_id(req, **data)
+        return {"_id": _id, "key": key}
 
     def test_the_class_implements_auth_policy_interface(self):
         verifyClass(IAuthenticationPolicy, HawkAuthenticationPolicy)
 
     def test_from_settings_can_explicitly_set_all_properties(self):
         policy = HawkAuthenticationPolicy.from_settings({
-          "hawkauth.find_groups": "pyramid_hawkauth.tests:stub_find_groups",
+          "hawkauth.find_groups": TEST_PREFIX + ":stub_find_groups",
           "hawkauth.master_secret": "V8 JUICE IS 1/8TH GASOLINE",
           "hawkauth.nonce_cache": "hawkauthlib:NonceCache",
-          "hawkauth.decode_hawk_id": "pyramid_hawkauth.tests:stub_decode_id",
-          "hawkauth.encode_hawk_id": "pyramid_hawkauth.tests:stub_encode_id",
+          "hawkauth.decode_hawk_id": TEST_PREFIX + ":stub_decode_id",
+          "hawkauth.encode_hawk_id": TEST_PREFIX + ":stub_encode_id",
         })
         self.assertEquals(policy.find_groups, stub_find_groups)
         self.assertEquals(policy.master_secret, "V8 JUICE IS 1/8TH GASOLINE")
@@ -161,18 +103,18 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
 
     def test_from_settings_errors_out_on_args_to_a_non_callable(self):
         self.assertRaises(ValueError, HawkAuthenticationPolicy.from_settings, {
-          "hawkauth.nonce_cache": "pyramid_hawkauth.tests:stub_non_callable",
+          "hawkauth.nonce_cache": TEST_PREFIX + ":stub_non_callable",
           "hawkauth.nonce_cache_arg": "invalidarg",
         })
 
     def test_from_settings_errors_out_if_decode_hawk_id_is_not_callable(self):
         self.assertRaises(ValueError, HawkAuthenticationPolicy.from_settings, {
-          "hawkauth.decode_hawk_id": "pyramid_hawkauth.tests:stub_non_callable"
+          "hawkauth.decode_hawk_id": TEST_PREFIX + ":stub_non_callable"
         })
 
     def test_from_settings_errors_out_if_encode_hawk_id_is_not_callable(self):
         self.assertRaises(ValueError, HawkAuthenticationPolicy.from_settings, {
-          "hawkauth.encode_hawk_id": "pyramid_hawkauth.tests:stub_non_callable"
+          "hawkauth.encode_hawk_id": TEST_PREFIX + ":stub_non_callable"
         })
 
     def test_from_settings_produces_sensible_defaults(self):
@@ -187,14 +129,14 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
 
     def test_from_settings_curries_args_to_decode_hawk_id(self):
         policy = HawkAuthenticationPolicy.from_settings({
-          "hawkauth.decode_hawk_id": "pyramid_hawkauth.tests:stub_decode_id",
+          "hawkauth.decode_hawk_id": TEST_PREFIX + ":stub_decode_id",
           "hawkauth.decode_hawk_id_suffix": "-TEST",
         })
         self.assertEquals(policy.decode_hawk_id(None, "id"), ("id", "id-TEST"))
 
     def test_from_settings_curries_args_to_encode_hawk_id(self):
         policy = HawkAuthenticationPolicy.from_settings({
-          "hawkauth.encode_hawk_id": "pyramid_hawkauth.tests:stub_encode_id",
+          "hawkauth.encode_hawk_id": TEST_PREFIX + ":stub_encode_id",
           "hawkauth.encode_hawk_id_suffix": "-TEST",
         })
         self.assertEquals(policy.encode_hawk_id(None, "id"), ("id", "id-TEST"))
@@ -357,8 +299,11 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
 
     def test_check_signature_fails_if_no_params_present(self):
         req = self._make_request("/auth")
-        self.assertRaises(HTTPUnauthorized,
-                          self.policy._check_signature, req, "XXX")
+        self.assertRaises(
+            HTTPUnauthorized
+            , self.policy._check_signature  # pylint: disable=W0212
+            , req, "XXX"
+            , )
 
     def test_default_groupfinder_returns_empty_list(self):
         policy = HawkAuthenticationPolicy()

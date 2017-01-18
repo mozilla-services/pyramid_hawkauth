@@ -82,7 +82,7 @@ class HawkAuthenticationPolicy(object):
             self.encode_hawk_id = encode_hawk_id
 
     @classmethod
-    def from_settings(cls, settings={}, prefix="hawkauth.", **extra):
+    def from_settings(cls, settings=None, prefix="hawkauth.", **extra):
         """Construct a HawkAuthenticationPolicy from deployment settings.
 
         This is a helper function for loading a HawkAuthenticationPolicy from
@@ -90,6 +90,8 @@ class HawkAuthenticationPolicy(object):
         settings with the given prefix, converts them to the appropriate type
         and passes them into the constructor.
         """
+        if settings is None:
+            settings = {}
         # Grab out all the settings keys that start with our prefix.
         hawkauth_settings = {}
         for name in settings:
@@ -173,7 +175,7 @@ class HawkAuthenticationPolicy(object):
         principals.extend(groups)
         return principals
 
-    def remember(self, request, principal, **kw):
+    def remember(self, request, principal, **kw):  # pylint: disable=W0613
         """Get headers to remember to given principal identity.
 
         This is a no-op for this plugin; the client is supposed to remember
@@ -181,7 +183,7 @@ class HawkAuthenticationPolicy(object):
         """
         return []
 
-    def forget(self, request):
+    def forget(self, request):    # pylint: disable=W0613
         """Get headers to forget the identity in the given request.
 
         This simply issues a new WWW-Authenticate challenge, which should
@@ -198,7 +200,7 @@ class HawkAuthenticationPolicy(object):
         """
         return HTTPUnauthorized(content, headers=self.forget(request))
 
-    def find_groups(self, userid, request):
+    def find_groups(self, userid, request):  # pylint: disable=E0202,W0613
         """Find the list of groups for the given userid.
 
         This method provides a default implementation of the "groupfinder
@@ -210,7 +212,7 @@ class HawkAuthenticationPolicy(object):
         """
         return []
 
-    def decode_hawk_id(self, request, tokenid):
+    def decode_hawk_id(self, request, tokenid):  # pylint: disable=E0202
         """Decode a Hawk token id into its userid and Hawk secret key.
 
         This method decodes the given Hawk token id to give the corresponding
@@ -233,7 +235,8 @@ class HawkAuthenticationPolicy(object):
             raise self.challenge(request, msg)
         return userid, secret
 
-    def encode_hawk_id(self, request, userid=None, **data):
+    def encode_hawk_id(  # pylint: disable=E0202, W0613
+            self, request, userid=None, **data):
         """Encode the given userid into a Hawk token id and secret key.
 
         This method is essentially the reverse of decode_hawk_id.  Given
