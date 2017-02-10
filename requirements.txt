@@ -7,8 +7,8 @@ git+https://github.com/return42/tokenlib@six#egg=tokenlib         # tokenlib >= 
 webtest
 
 # develop
-coverage
-nose
+pytest
+pytest-cov
 pip
 pylint
 tox

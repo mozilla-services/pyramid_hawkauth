@@ -11,7 +11,7 @@
 import unittest
 import time
 
-from webtest import TestApp
+import webtest
 
 from zope.interface.verify import verifyClass
 
@@ -51,7 +51,7 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
         self.config.add_view(stub_view_auth, route_name="auth")
         self.config.add_route("groups", "/groups")
         self.config.add_view(stub_view_groups, route_name="groups")
-        self.app = TestApp(self.config.make_wsgi_app())
+        self.app = webtest.TestApp(self.config.make_wsgi_app())
         self.policy = self.config.registry.queryUtility(IAuthenticationPolicy)
 
     def _make_request(self, *args, **kwds):
