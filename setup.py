@@ -26,7 +26,10 @@ REQUIRES         = ['pyramid'
                     , 'hawkauthlib >= 2.0.0rc1'
                     , 'tokenlib >= 2.0.0rc1'
                     , ]
-TESTS_REQUIRES   = REQUIRES + ['webtest', ]
+EXTRAS_REQUIRE = {
+    'test'     : ['webtest', ]    # https://github.com/pypa/pip/issues/1197
+    , }
+
 META_FILE        = read_file('pyramid_hawkauth/__init__.py')
 LONG_DESCRIPTION = [ read_file(n) for n in ['README.rst', 'CHANGES.txt']]
 
@@ -42,8 +45,7 @@ setup(name                   = NAME
       , packages             = find_packages()
       , include_package_data = True
       , install_requires     = REQUIRES
-      # unfortunately test is not supported by pip (only 'setup.py test')
-      , tests_require        = TESTS_REQUIRES
+      , extras_require       = EXTRAS_REQUIRE
       , test_suite           = NAME # "pyramid_hawkauth.tests"
       , zip_safe             = False
       , classifiers          = [

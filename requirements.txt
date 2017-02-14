@@ -1,12 +1,27 @@
+# --------
 # requires
-pyramid >= 1.6
-git+https://github.com/return42/hawkauthlib@six#egg=hawkauthlib   # hawkauthlib >= 2.0
-git+https://github.com/return42/tokenlib@six#egg=tokenlib         # tokenlib >= 2.0
+# --------
 
+pyramid >= 1.6
+
+-e file:../tokenlib#egg=tokenlib
+# tokenlib >= 2.0
+# git+https://github.com/return42/tokenlib@six#egg=tokenlib
+
+-e file:../hawkauthlib#egg=hawkauthlib
+# hawkauthlib >= 2.0
+# git+https://github.com/return42/hawkauthlib@six#egg=hawkauthlib
+
+# --------------
 # tests_requires
+# --------------
+
 webtest
 
+# --------
 # develop
+# --------
+
 pytest
 pytest-cov
 pip
