@@ -175,7 +175,7 @@ class HawkAuthenticationPolicy(object):
         principals.extend(groups)
         return principals
 
-    def remember(self, request, principal, **kw):  # pylint: disable=W0613
+    def remember(self, request, principal, **kw):  # pylint: disable=no-self-use, unused-argument
         """Get headers to remember to given principal identity.
 
         This is a no-op for this plugin; the client is supposed to remember
@@ -183,7 +183,7 @@ class HawkAuthenticationPolicy(object):
         """
         return []
 
-    def forget(self, request):    # pylint: disable=W0613
+    def forget(self, request):  # pylint: disable=no-self-use, unused-argument
         """Get headers to forget the identity in the given request.
 
         This simply issues a new WWW-Authenticate challenge, which should
@@ -200,7 +200,7 @@ class HawkAuthenticationPolicy(object):
         """
         return HTTPUnauthorized(content, headers=self.forget(request))
 
-    def find_groups(self, userid, request):  # pylint: disable=E0202,W0613
+    def find_groups(self, userid, request):  # pylint: disable=no-self-use, unused-argument, method-hidden
         """Find the list of groups for the given userid.
 
         This method provides a default implementation of the "groupfinder
@@ -251,7 +251,7 @@ class HawkAuthenticationPolicy(object):
         secret = tokenlib.get_derived_secret(tokenid, secret=master_secret)
         return tokenid, secret
 
-    def _get_params(self, request):
+    def _get_params(self, request): # pylint: disable=no-self-use
         """Get the Hawk auth parameters from the given request.
 
         This method parses the Authorization header to get the Hawk auth
