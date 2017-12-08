@@ -23,7 +23,7 @@ def find_meta(meta):
 
 NAME             = 'pyramid_hawkauth'
 REQUIRES         = ['pyramid'
-                    , 'hawkauthlib >= 2.0.0rc1'
+                    , 'hawkauthlib >= 2.0.0'
                     , 'tokenlib >= 2.0.0rc1'
                     , ]
 EXTRAS_REQUIRE = {
