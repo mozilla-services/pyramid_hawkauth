@@ -64,8 +64,8 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
         return req
 
     def _get_credentials(self, req, **data):
-        _id, key = self.policy.encode_hawk_id(req, **data)
-        return {"_id": _id, "key": key}
+        id_, key = self.policy.encode_hawk_id(req, **data)
+        return {"id_": id_, "key": key}
 
     def test_the_class_implements_auth_policy_interface(self):
         verifyClass(IAuthenticationPolicy, HawkAuthenticationPolicy)
