@@ -10,3 +10,4 @@ dist
 local/
 html/
 .coverage
+.cache/
