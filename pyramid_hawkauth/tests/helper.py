@@ -1,14 +1,14 @@
 # -*- coding: utf-8; mode: python -*-
 # pylint: disable=W0613
 
-__all__ = ["stub_find_groups"
-           , "stub_view_public"
-           , "stub_view_auth"
-           , "stub_view_groups"
-           , "stub_decode_id"
-           , "stub_encode_id"
-           , "make_request"
-           , ]
+__all__ = ["stub_find_groups",
+           "stub_view_public",
+           "stub_view_auth",
+           "stub_view_groups",
+           "stub_decode_id",
+           "stub_encode_id",
+           "make_request",
+           ]
 
 import json
 
@@ -16,10 +16,9 @@ from pyramid.request import Request
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.security import (
-    unauthenticated_userid
-    , authenticated_userid
-    , effective_principals
-    , )
+    unauthenticated_userid,
+    authenticated_userid,
+    effective_principals )
 
 def make_request(config, path="/", environ=None):
     """Helper function for making pyramid Request objects."""
@@ -81,11 +80,11 @@ def stub_view_groups(request):
     return Response(json.dumps([str(g) for g in groups]))
 
 
-def stub_decode_id(request, _id, suffix="-SECRET"):
+def stub_decode_id(request, id_, suffix="-SECRET"):
     """Stub id-decoding function that appends suffix to give the secret."""
-    return _id, _id + suffix
+    return id_, id_ + suffix
 
 
-def stub_encode_id(request, _id, suffix="-SECRET"):
+def stub_encode_id(request, id_, suffix="-SECRET"):
     """Stub id-encoding function that appends suffix to give the secret."""
-    return _id, _id + suffix
+    return id_, id_ + suffix

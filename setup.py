@@ -15,20 +15,18 @@ def find_meta(meta):
     """
     meta_match = re.search(
         r"^__{meta}__\s*=\s*['\"]([^'\"]*)['\"]".format(meta=meta),
-        META_FILE
-        , re.M )
+        META_FILE, re.M )
     if meta_match:
         return meta_match.group(1)
     raise RuntimeError("Unable to find __{meta}__ string.".format(meta=meta))
 
 NAME             = 'pyramid_hawkauth'
-REQUIRES         = ['pyramid'
-                    , 'hawkauthlib >= 2.0.0'
-                    , 'tokenlib >= 2.0.0'
-                    , ]
+REQUIRES         = ['pyramid',
+                    'hawkauthlib >= 2.0.0',
+                    'tokenlib >= 2.0.0' ]
 EXTRAS_REQUIRE = {
     'test'     : ['webtest', ]    # https://github.com/pypa/pip/issues/1197
-    , }
+    }
 
 META_FILE        = read_file('pyramid_hawkauth/__init__.py')
 LONG_DESCRIPTION = [ read_file(n) for n in ['README.rst', 'CHANGES.txt']]

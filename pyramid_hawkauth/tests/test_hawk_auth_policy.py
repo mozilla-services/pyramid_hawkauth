@@ -1,12 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
-# pylint: disable=C0103
-
-# FIXME:
-#
-# pylint: disable=W1505
-
 
 import unittest
 import time
@@ -26,10 +20,9 @@ from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from pyramid.security import (
-    authenticated_userid
-    , Everyone
-    , Authenticated
-    , )
+    authenticated_userid,
+    Everyone,
+    Authenticated )
 
 
 from . helper import *   # pylint: disable=W0401, W0614
@@ -300,10 +293,9 @@ class TestHawkAuthenticationPolicy(unittest.TestCase):
     def test_check_signature_fails_if_no_params_present(self):
         req = self._make_request("/auth")
         self.assertRaises(
-            HTTPUnauthorized
-            , self.policy._check_signature  # pylint: disable=W0212
-            , req, "XXX"
-            , )
+            HTTPUnauthorized,
+            self.policy._check_signature,
+            req, "XXX")
 
     def test_default_groupfinder_returns_empty_list(self):
         policy = HawkAuthenticationPolicy()
