@@ -6,7 +6,7 @@ pyramid >= 1.6
 
 # tokenlib >= 2.0.0
 # use github as long as it is not released on PyPi
-git+https://github.com/return42/tokenlib@six
+git+https://github.com/mozilla-services/tokenlib
 
 # hawkauthlib >= 2.0.0
 # use github as long as it is not released on PyPi

@@ -24,7 +24,7 @@ def find_meta(meta):
 NAME             = 'pyramid_hawkauth'
 REQUIRES         = ['pyramid'
                     , 'hawkauthlib >= 2.0.0'
-                    , 'tokenlib >= 2.0.0rc1'
+                    , 'tokenlib >= 2.0.0'
                     , ]
 EXTRAS_REQUIRE = {
     'test'     : ['webtest', ]    # https://github.com/pypa/pip/issues/1197
