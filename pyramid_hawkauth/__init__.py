@@ -9,7 +9,7 @@ A Pyramid authentication plugin for Hawk Access Authentication:
 
 """
 
-__version__      = "2.0.0rc1"
+__version__      = "2.0.0"
 __description__  = "A Pyramid authentication plugin for HAWK"
 __url__          = "https://github.com/mozilla-services/pyramid_hawkauth"
 __license__      = "MPLv2.0"
