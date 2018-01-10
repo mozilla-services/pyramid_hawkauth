@@ -1,0 +1,25 @@
+# --------
+# requires
+# --------
+
+pyramid >= 1.6
+tokenlib >= 2.0.0
+hawkauthlib >= 2.0.0
+
+# --------------
+# tests_requires
+# --------------
+
+webtest
+
+# --------
+# develop
+# --------
+
+pytest
+pytest-cov
+pip
+pylint
+tox
+twine
+wheel

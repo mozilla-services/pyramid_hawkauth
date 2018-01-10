@@ -9,12 +9,13 @@ A Pyramid authentication plugin for Hawk Access Authentication:
 
 """
 
-__ver_major__ = 0
-__ver_minor__ = 1
-__ver_patch__ = 1
-__ver_sub__ = ".dev1"
-__ver_tuple__ = (__ver_major__, __ver_minor__, __ver_patch__, __ver_sub__)
-__version__ = "%d.%d.%d%s" % __ver_tuple__
+__version__      = "2.0.0rc1"
+__description__  = "A Pyramid authentication plugin for HAWK"
+__url__          = "https://github.com/mozilla-services/pyramid_hawkauth"
+__license__      = "MPLv2.0"
+__author__       = 'Mozilla Services'
+__author_email__ = 'services-dev@mozilla.org'
+__keywords__     = 'authentication token hawk request signing'
 
 
 import functools
@@ -81,7 +82,7 @@ class HawkAuthenticationPolicy(object):
             self.encode_hawk_id = encode_hawk_id
 
     @classmethod
-    def from_settings(cls, settings={}, prefix="hawkauth.", **extra):
+    def from_settings(cls, settings=None, prefix="hawkauth.", **extra):
         """Construct a HawkAuthenticationPolicy from deployment settings.
 
         This is a helper function for loading a HawkAuthenticationPolicy from
@@ -89,6 +90,8 @@ class HawkAuthenticationPolicy(object):
         settings with the given prefix, converts them to the appropriate type
         and passes them into the constructor.
         """
+        if settings is None:
+            settings = {}
         # Grab out all the settings keys that start with our prefix.
         hawkauth_settings = {}
         for name in settings:
@@ -172,7 +175,7 @@ class HawkAuthenticationPolicy(object):
         principals.extend(groups)
         return principals
 
-    def remember(self, request, principal, **kw):
+    def remember(self, request, principal, **kw):  # pylint: disable=no-self-use, unused-argument
         """Get headers to remember to given principal identity.
 
         This is a no-op for this plugin; the client is supposed to remember
@@ -180,7 +183,7 @@ class HawkAuthenticationPolicy(object):
         """
         return []
 
-    def forget(self, request):
+    def forget(self, request):  # pylint: disable=no-self-use, unused-argument
         """Get headers to forget the identity in the given request.
 
         This simply issues a new WWW-Authenticate challenge, which should
@@ -197,7 +200,7 @@ class HawkAuthenticationPolicy(object):
         """
         return HTTPUnauthorized(content, headers=self.forget(request))
 
-    def find_groups(self, userid, request):
+    def find_groups(self, userid, request):  # pylint: disable=no-self-use, unused-argument, method-hidden
         """Find the list of groups for the given userid.
 
         This method provides a default implementation of the "groupfinder
@@ -209,7 +212,7 @@ class HawkAuthenticationPolicy(object):
         """
         return []
 
-    def decode_hawk_id(self, request, tokenid):
+    def decode_hawk_id(self, request, tokenid):  # pylint: disable=E0202
         """Decode a Hawk token id into its userid and Hawk secret key.
 
         This method decodes the given Hawk token id to give the corresponding
@@ -232,7 +235,8 @@ class HawkAuthenticationPolicy(object):
             raise self.challenge(request, msg)
         return userid, secret
 
-    def encode_hawk_id(self, request, userid=None, **data):
+    def encode_hawk_id(  # pylint: disable=E0202, W0613
+            self, request, userid=None, **data):
         """Encode the given userid into a Hawk token id and secret key.
 
         This method is essentially the reverse of decode_hawk_id.  Given
@@ -247,7 +251,7 @@ class HawkAuthenticationPolicy(object):
         secret = tokenlib.get_derived_secret(tokenid, secret=master_secret)
         return tokenid, secret
 
-    def _get_params(self, request):
+    def _get_params(self, request): # pylint: disable=no-self-use
         """Get the Hawk auth parameters from the given request.
 
         This method parses the Authorization header to get the Hawk auth
